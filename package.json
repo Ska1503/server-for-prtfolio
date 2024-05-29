@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "start": "ts-node ./src/api/index.ts",
-    "dev": "nodemon -I --exec node --experimental-specifier-resolution=node  --loader ts-node/esm ./src/api/index.ts"
+    "dev": "nodemon -I --exec node --experimental-specifier-resolution=node  --loader ts-node/esm ./api/index.ts"
   },
   "keywords": [],
   "author": "",

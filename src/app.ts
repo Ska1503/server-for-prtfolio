@@ -1,9 +1,9 @@
 import express from 'express'
 import cors from 'cors'
-import { Config } from '../config'
-import { ErrorHandler } from '../middlewares'
-import { Logger } from '../utils'
-import { EmailRoutes, TelegramRoutes } from '../routes'
+import { Config } from './config'
+import { ErrorHandler } from './middlewares'
+import { Logger } from './utils'
+import { EmailRoutes, TelegramRoutes } from './routes'
 
 class App {
   public app: express.Application

@@ -1,6 +1,6 @@
-import app from './api'
-import { Config } from './config'
-import { Logger } from './utils'
+import app from '../src/app'
+import { Config } from '../src/config'
+import { Logger } from '../src/utils'
 
 const PORT = Config.getPort()
 
