@@ -12,22 +12,26 @@ export class EmailGateway {
     text,
     nameSender,
   }: EmailJsData): Promise<void> {
-    const transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo> =
-      nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: Config.getEmailUser(),
-          pass: Config.getEmailPass(),
-        },
-      })
+    try {
+      const transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo> =
+        nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: Config.getEmailUser(),
+            pass: Config.getEmailPass(),
+          },
+        })
 
-    const email: EmailJsData = {
-      from,
-      to,
-      subject: 'Email from Website',
-      text: `${text} 
+      const email: EmailJsData = {
+        from,
+        to,
+        subject: 'Email from Website',
+        text: `${text} 
       <<From - email: ${from} Name: ${nameSender}>>`,
+      }
+      await transporter.sendMail(email)
+    } catch (e) {
+      console.error('Error sending email:', e)
     }
-    await transporter.sendMail(email)
   }
 }
