@@ -25,6 +25,9 @@ class App {
   private routes(): void {
     this.app.use('/api/telegram', TelegramRoutes)
     this.app.use('/api/email', EmailRoutes)
+    this.app.get('/', (req, res) => {
+      res.send('Server connected')
+    })
   }
 
   private errorHandling(): void {
