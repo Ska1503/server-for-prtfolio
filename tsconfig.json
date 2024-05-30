@@ -1,17 +1,12 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
-    "target": "ES2018",
-    "module": "ESNext",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
+    "target": "es2016",
+    "module": "commonjs",
+    "outDir": "./build",
     "esModuleInterop": true,
-    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
+    "strict": true,
+    "skipLibCheck": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*"]
 }
