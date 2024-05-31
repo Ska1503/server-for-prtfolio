@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response } from 'express'
 import { Logger } from '../utils'
 
 export class ErrorHandler {
@@ -6,7 +6,6 @@ export class ErrorHandler {
     err: any,
     req: Request,
     res: Response,
-    next: NextFunction
   ): void {
     Logger.error(err)
     res
