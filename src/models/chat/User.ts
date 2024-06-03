@@ -1,21 +1,19 @@
 import { Schema, model, Document, Types } from 'mongoose'
+import { v4 as uuidv4 } from 'uuid'
+import { UserMessages } from '../../interfaces'
 
 interface User extends Document {
   nickname: string
-  messages: Types.ObjectId[]
+  messages: UserMessages[]
   roomId: string
   email: string
-  userId: string
 }
-
-const id = crypto.randomUUID()
 
 const userSchema = new Schema<User>({
   nickname: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
-  roomId: { type: String, required: true },
-  userId: { type: String, default: id },
+  messages: [{ type: Object, ref: 'Message' }],
+  roomId: { type: String, default: uuidv4 },
 })
 
 export const User = model<User>('User', userSchema)

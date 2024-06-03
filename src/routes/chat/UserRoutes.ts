@@ -11,6 +11,8 @@ class UserRoutes {
 
   private routes(): void {
     this.router.post('/createUser', UserController.createUser)
+    this.router.get('/users', UserController.getAllUsers)
+    this.router.get('/users/:userId', UserController.getUserById)
   }
 }
 

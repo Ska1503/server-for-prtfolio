@@ -26,7 +26,7 @@ class App {
     this.server = http.createServer(this.app)
     this.config()
     this.routes()
-    this.errorHandling()
+    // this.errorHandling()
     this.logInfo()
     this.io = new Server(this.server, {
       cors: {
@@ -56,9 +56,9 @@ class App {
     this.app.use('/api/email', EmailRoutes)
   }
 
-  private errorHandling(): void {
-    this.app.use(ErrorHandler.handle)
-  }
+  // private errorHandling(): void {
+  //   this.app.use(ErrorHandler.handle)
+  // }
 
   private logInfo(): void {
     Logger.info('Server started')
