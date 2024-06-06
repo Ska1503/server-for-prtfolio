@@ -8,7 +8,6 @@ Config.loadConfig()
 export class EmailGateway {
   public static async sendEmail({
     from,
-    to,
     text,
     nameSender,
   }: EmailJsData): Promise<void> {
@@ -24,7 +23,7 @@ export class EmailGateway {
 
       const email: EmailJsData = {
         from,
-        to,
+        to: Config.getEmailUser(),
         subject: 'Email from Website',
         text: `${text} 
       <<From - email: ${from} Name: ${nameSender}>>`,

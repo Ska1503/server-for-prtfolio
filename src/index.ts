@@ -4,61 +4,56 @@ import http from 'http'
 import { Server } from 'socket.io'
 import connectDB from './db'
 import { Config } from './config'
-import { ErrorHandler } from './middlewares'
+import { ErrorHandler, SocketHandler } from './middlewares'
 import { Logger } from './utils'
-import {
-  EmailRoutes,
-  MessageRoutes,
-  TelegramRoutes,
-  UserRoutes,
-} from './routes'
-import { ChatService } from './services'
+import { ChatRoutes, EmailRoutes, TelegramRoutes } from './routes'
 
 const PORT = Config.getPort()
 class App {
   public app: express.Application
   public server: http.Server
-  public io: Server
-  public chatService: ChatService
+  public io!: Server
 
   constructor() {
     this.app = express()
     this.server = http.createServer(this.app)
     this.config()
     this.routes()
-    // this.errorHandling()
+    this.errorHandling()
     this.logInfo()
-    this.io = new Server(this.server, {
-      cors: {
-        origin: '*',
-        methods: ['GET', 'POST'],
-      },
-    })
-    this.chatService = new ChatService(this.io)
-    this.chatService.initialize()
+    this.initializeSocket()
   }
 
   private config(): void {
     Config.loadConfig()
+    connectDB.connect()
     this.app.use(cors())
     this.app.use(express.json())
-    connectDB.connect()
-    this.app.listen(PORT, () => {
+    this.server.listen(PORT, () =>
       Logger.info(`Server is running on port ${PORT}`)
-    })
+    )
   }
 
   private routes(): void {
-    this.app.get('/', (_, res) => res.send('Server connected'))
-    this.app.use('/api/chat', UserRoutes)
-    this.app.use('/api/chat', MessageRoutes)
+    this.app.use('/api/chat', ChatRoutes)
     this.app.use('/api/telegram', TelegramRoutes)
     this.app.use('/api/email', EmailRoutes)
   }
 
-  // private errorHandling(): void {
-  //   this.app.use(ErrorHandler.handle)
-  // }
+  private errorHandling(): void {
+    this.app.use(ErrorHandler.handle)
+  }
+
+  private initializeSocket(): void {
+    this.io = new Server(this.server, {
+      cors: {
+        origin: '*',
+        methods: ['GET', 'POST', 'DELETE'],
+      },
+    })
+
+    new SocketHandler(this.io)
+  }
 
   private logInfo(): void {
     Logger.info('Server started')

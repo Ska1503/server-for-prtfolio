@@ -9,8 +9,8 @@ export class EmailController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const email = req.body as unknown as EmailJsData
-      await EmailGateway.sendEmail(email)
+      const email = req.body
+      await EmailGateway.sendEmail(email as unknown as EmailJsData)
       res.json()
     } catch (error) {
       next(error)

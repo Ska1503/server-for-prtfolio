@@ -1,4 +1,3 @@
-import MessageController from './MessageController'
-import UserController from './UserController'
+import ChatController from './ChatController'
 
-export { MessageController, UserController }
+export { ChatController }

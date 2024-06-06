@@ -1,19 +1,15 @@
 import { Schema, model, Document, Types } from 'mongoose'
-import { v4 as uuidv4 } from 'uuid'
-import { UserMessages } from '../../interfaces'
+import { Message } from '../../interfaces'
+import { messageSchema } from './Message'
 
 interface User extends Document {
-  nickname: string
-  messages: UserMessages[]
-  roomId: string
   email: string
+  messages: Message[]
 }
 
-const userSchema = new Schema<User>({
-  nickname: { type: String, required: true },
+export const userSchema = new Schema<User>({
   email: { type: String, required: true, unique: true },
-  messages: [{ type: Object, ref: 'Message' }],
-  roomId: { type: String, default: uuidv4 },
+  messages: [messageSchema],
 })
 
-export const User = model<User>('User', userSchema)
+export default model('User', userSchema)

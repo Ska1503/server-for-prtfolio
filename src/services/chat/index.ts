@@ -1,3 +1,3 @@
-import { ChatService } from './ChatService'
+import  ChatService  from './ChatService'
 
 export { ChatService }

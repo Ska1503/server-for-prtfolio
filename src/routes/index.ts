@@ -1,5 +1,5 @@
 import { TelegramRoutes } from './telegram'
 import { EmailRoutes } from './email'
-import { MessageRoutes, UserRoutes } from './chat'
+import { ChatRoutes } from './chat'
 
-export { TelegramRoutes, EmailRoutes, MessageRoutes, UserRoutes }
+export { TelegramRoutes, EmailRoutes, ChatRoutes }

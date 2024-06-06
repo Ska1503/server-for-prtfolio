@@ -1,4 +1,3 @@
-import MessageRoutes from './MessageRoutes'
-import UserRoutes from './UserRoutes'
+import ChatRoutes from './ChatRoutes'
 
-export { MessageRoutes, UserRoutes }
+export { ChatRoutes }
