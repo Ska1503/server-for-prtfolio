@@ -1,13 +1,9 @@
 import { Message } from '../../interfaces'
 import { User } from '../../models'
+
 class ChatService {
   public getUserByEmail = async (email: string) => {
     let user = await User.findOne({ email })
-
-    if (!user) {
-      throw new Error('User not found')
-    }
-
     return user
   }
 
@@ -29,6 +25,15 @@ class ChatService {
     return users
   }
 
+  public createUser = async (email: string) => {
+    const existingUser = await User.findOne({ email })
+
+    if (!existingUser) {
+      const newUser = new User({ email, messages: [] })
+      await newUser.save()
+    }
+  }
+
   public addUserMessage = async (email: string, message: Message) => {
     let user = await User.findOne({ email })
 
@@ -44,38 +49,3 @@ class ChatService {
 }
 
 export default new ChatService()
-
-// export class ChatService {
-//   private io: Server
-
-//   constructor(io: Server) {
-//     this.io = io
-//   }
-
-//   public initialize() {
-//     this.io.on('connection', (socket: Socket) => {
-//       socket.on('join', async ({ nickname, roomId }) => {
-//         const user = await User.findOne({ nickname, roomId })
-//         if (!user) {
-//           socket.emit('error', 'User not found')
-//           return
-//         }
-
-//         socket.join(roomId)
-
-//         socket.on('message', async msg => {
-//           const message = new Message({ userId: user._id, text: msg })
-//           await message.save()
-//           user.messages.push({ text: message.text, createdAt: message.createdAt })
-//           await user.save()
-
-//           this.io.to(roomId).emit('message', {
-//             text: msg,
-//             user: user.nickname,
-//             createdAt: Date.now(),
-//           })
-//         })
-//       })
-//     })
-//   }
-// }

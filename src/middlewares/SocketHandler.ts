@@ -13,16 +13,21 @@ export class SocketHandler {
     this.io.on('connection', (socket: Socket) => {
       Logger.info('User connected')
 
-      socket.on('join', ({ email }) => {
-        Logger.info(`User ${email} joined`)
-        socket.join(email)
+      socket.on('join', ({ userName }) => {
+        Logger.info(`User ${userName} joined`)
+        socket.join(userName)
       })
 
       socket.on('send_message', message => {
         Logger.info(
-          `Message from ${message.sender} to ${message.receiver}: ${message.content}`
+          `Message from ${message.sender} to ${message.receiver}: ${message.text}`
         )
-        this.io.to(message.receiver).emit('receive_message', message)
+        this.io.emit('response', message)
+      })
+
+      socket.on('leave', ({ userName }) => {
+        Logger.info(`User ${userName} left`)
+        socket.leave(userName)
       })
 
       socket.on('disconnect', () => {
