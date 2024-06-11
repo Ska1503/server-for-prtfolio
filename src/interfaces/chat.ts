@@ -7,4 +7,5 @@ export interface Message {
 export interface User {
   email: string
   messages: Message[]
+  userId: string
 }

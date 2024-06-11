@@ -2,21 +2,46 @@ import { Request, Response } from 'express'
 import { ChatService } from '../../services'
 
 class ChatController {
+  public createUser = async (req: Request, res: Response) => {
+    try {
+      const { email } = req.params
+      const createdUser = await ChatService.createUser(email)
+      const { userId, messages } = createdUser
+
+      res.status(200).json({ email, userId, messages })
+    } catch (error) {
+      res.status(500).json({ messageError: 'Internal Server Error:', error })
+    }
+  }
+
   public getUserByEmail = async (req: Request, res: Response) => {
     const { email } = req.params
     const user = await ChatService.getUserByEmail(email)
 
     if (user) {
-      res.status(200).json({ user })
+      const { email, messages, userId } = user
+      res.status(200).json({ email, messages, userId })
     } else {
       res.status(404).json({ messageError: 'User not found' })
     }
   }
 
-  public deleteUserByEmail = async (req: Request, res: Response) => {
+  public getUserByUserId = async (req: Request, res: Response) => {
+    const { userId } = req.params
+    const user = await ChatService.getUserByUserId(userId)
+
+    if (user) {
+      const { email, messages, userId } = user
+      res.status(200).json({ email, messages, userId })
+    } else {
+      res.status(404).json({ messageError: 'User not found' })
+    }
+  }
+
+  public deleteUserUserId = async (req: Request, res: Response) => {
     try {
-      const { email } = req.params
-      await ChatService.deleteUserByEmail(email)
+      const { userId } = req.params
+      await ChatService.deleteUserUserId(userId)
 
       res
         .status(200)
@@ -32,28 +57,6 @@ class ChatController {
       res.status(200).json({ users })
     } catch (error) {
       res.status(500).json({ messageError: 'Internal Server Error', error })
-    }
-  }
-
-  public createUser = async (req: Request, res: Response) => {
-    try {
-      const { email } = req.params
-      const createdUser = await ChatService.createUser(email)
-
-      res.status(200).json({ createdUser })
-    } catch (error) {
-      res.status(500).json({ messageError: 'Internal Server Error:', error })
-    }
-  }
-
-  public addUserMessage = async (req: Request, res: Response) => {
-    try {
-      const { email, message } = req.body
-      let user = await ChatService.addUserMessage(email, message)
-
-      res.status(201).json({ user })
-    } catch (error) {
-      res.status(500).json({ messageError: 'Internal Server Error:', error })
     }
   }
 }

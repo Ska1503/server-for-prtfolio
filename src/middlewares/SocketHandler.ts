@@ -1,5 +1,6 @@
 import { Server, Socket } from 'socket.io'
 import { Logger } from '../utils'
+import { User } from '../models'
 
 export class SocketHandler {
   private io: Server
@@ -18,11 +19,27 @@ export class SocketHandler {
         socket.join(userName)
       })
 
-      socket.on('send_message', message => {
+      socket.on('send_message', async message => {
+        const email =
+          message.receiver === 'admin' ? message.sender : message.receiver
+
+        let user = await User.findOne({ email })
+
+        if (!user) {
+          user = new User({ email, messages: [message] })
+        } else {
+          user.messages.push(message)
+        }
+        await user.save()
+
         Logger.info(
           `Message from ${message.sender} to ${message.receiver}: ${message.text}`
         )
         this.io.emit('response', message)
+      })
+
+      socket.on('typing', ({ userName, isTyping }) => {
+        socket.to(userName).emit('typing', { userName, isTyping })
       })
 
       socket.on('leave', ({ userName }) => {

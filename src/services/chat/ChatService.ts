@@ -1,14 +1,18 @@
-import { Message } from '../../interfaces'
 import { User } from '../../models'
 
 class ChatService {
   public getUserByEmail = async (email: string) => {
-    let user = await User.findOne({ email })
+    const user = await User.findOne({ email })
     return user
   }
 
-  public deleteUserByEmail = async (email: string) => {
-    const user = await User.findOneAndDelete({ email })
+  public getUserByUserId = async (userId: string) => {
+    const user = await User.findOne({ userId })
+    return user
+  }
+
+  public deleteUserUserId = async (userId: string) => {
+    const user = await User.findOneAndDelete({ userId })
 
     if (!user) {
       throw new Error('User not found')
@@ -31,20 +35,10 @@ class ChatService {
     if (!existingUser) {
       const newUser = new User({ email, messages: [] })
       await newUser.save()
+      return newUser
     }
-  }
 
-  public addUserMessage = async (email: string, message: Message) => {
-    let user = await User.findOne({ email })
-
-    if (!user) {
-      user = new User({ email, messages: [message] })
-    } else {
-      user.messages.push(message)
-    }
-    await user.save()
-
-    return message
+    return existingUser
   }
 }
 
