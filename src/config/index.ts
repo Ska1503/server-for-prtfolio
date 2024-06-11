@@ -25,6 +25,10 @@ export class Config {
     return process.env.EMAIL_PASS as string
   }
 
+  public static getMongoURI(): string {
+    return process.env.MONGO_URI as string
+  }
+
   public static getPort(): string | number {
     return process.env.PORT || '3000'
   }
