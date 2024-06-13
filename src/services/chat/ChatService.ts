@@ -11,7 +11,15 @@ class ChatService {
     return user
   }
 
-  public deleteUserUserId = async (userId: string) => {
+  public deleteUserByUserId = async (userId: string) => {
+    const user = await User.findOneAndDelete({ userId })
+
+    if (!user) {
+      throw new Error('User not found')
+    }
+  }
+
+  public deleteChatByUserId = async (userId: string) => {
     const user = await User.findOneAndDelete({ userId })
 
     if (!user) {
