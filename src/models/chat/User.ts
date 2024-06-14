@@ -10,9 +10,9 @@ interface User extends Document {
 }
 
 export const userSchema = new Schema<User>({
-  userName: { type: String, required: true, unique: true },
+  userName: { type: String, required: true, unique: false },
   messages: [messageSchema],
-  userId: { type: String, default: uuidv4 },
+  userId: { type: String, default: uuidv4, unique: true },
 })
 
 export default model('User', userSchema)
