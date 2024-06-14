@@ -11,9 +11,8 @@ class ChatRoutes {
 
   private routes(): void {
     this.router.get('/users', ChatController.getAllUsers)
-    this.router.get('/:email/messages', ChatController.getUserByEmail)
     this.router.get('/:userId', ChatController.getUserByUserId)
-    this.router.post('/:email/create', ChatController.createUser)
+    this.router.post('/:userName/create', ChatController.createUser)
     this.router.delete('/:userId/deleteUser', ChatController.deleteUserByUserId)
     this.router.delete('/:userId/deleteChat', ChatController.deleteChatByUserId)
   }

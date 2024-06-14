@@ -15,36 +15,30 @@ export class SocketHandler {
       Logger.info('User connected')
 
       socket.on('join', ({ userName }) => {
-        Logger.info(`User ${userName} joined`)
         socket.join(userName)
       })
 
-      socket.on('send_message', async message => {
-        const email =
-          message.receiver === 'admin' ? message.sender : message.receiver
-
-        let user = await User.findOne({ email })
-
-        if (!user) {
-          user = new User({ email, messages: [message] })
-        } else {
-          user.messages.push(message)
-        }
-        await user.save()
-
-        Logger.info(
-          `Message from ${message.sender} to ${message.receiver}: ${message.text}`
-        )
-        this.io.emit('response', message)
+      socket.on('leave', ({ userName }) => {
+        socket.leave(userName)
       })
 
       socket.on('typing', ({ userName, isTyping }) => {
         socket.to(userName).emit('typing', { userName, isTyping })
       })
 
-      socket.on('leave', ({ userName }) => {
-        Logger.info(`User ${userName} left`)
-        socket.leave(userName)
+      socket.on('send_message', async message => {
+        const userId = message.receiver === 'admin' ? message.sender : message.receiver
+          
+        let user = await User.findOne({ userId })
+
+        if (!user) {
+          user = new User({ userId, messages: [message] })
+        } else {
+          user.messages.push(message)
+        }
+        await user.save()
+
+        this.io.emit('response', message)
       })
 
       socket.on('disconnect', () => {

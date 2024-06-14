@@ -1,11 +1,6 @@
 import { User } from '../../models'
 
 class ChatService {
-  public getUserByEmail = async (email: string) => {
-    const user = await User.findOne({ email })
-    return user
-  }
-
   public getUserByUserId = async (userId: string) => {
     const user = await User.findOne({ userId })
     return user
@@ -23,7 +18,7 @@ class ChatService {
     const user = await User.findOneAndDelete({ userId })
 
     if (!user) {
-      throw new Error('User not found')
+      throw new Error('Chat not found')
     }
   }
 
@@ -37,11 +32,11 @@ class ChatService {
     return users
   }
 
-  public createUser = async (email: string) => {
-    const existingUser = await User.findOne({ email })
+  public createUser = async (userName: string, userId: string) => {
+    const existingUser = await User.findOne({ userId })
 
     if (!existingUser) {
-      const newUser = new User({ email, messages: [] })
+      const newUser = new User({ userName, userId, messages: [] })
       await newUser.save()
       return newUser
     }
