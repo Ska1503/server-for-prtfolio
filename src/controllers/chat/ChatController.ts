@@ -5,26 +5,17 @@ import { TelegramGateway } from '../../gateways'
 class ChatController {
   public createUser = async (req: Request, res: Response) => {
     try {
-      const { email } = req.params
-      const createdUser = await ChatService.createUser(email)
-      const { userId, messages } = createdUser
-      await TelegramGateway.sendMessage(`User ${email} has joined to chat`)
+      const { userName } = req.params
+      const { userId } = req.body
 
-      res.status(200).json({ email, userId, messages })
+      const createdUser = await ChatService.createUser(userName, userId)
+      await TelegramGateway.sendMessage(`User ${userName} has joined the chat`)
+
+      const { messages } = createdUser
+
+      res.status(200).json({ userName, userId, messages })
     } catch (error) {
-      res.status(500).json({ messageError: 'Internal Server Error:', error })
-    }
-  }
-
-  public getUserByEmail = async (req: Request, res: Response) => {
-    const { email } = req.params
-    const user = await ChatService.getUserByEmail(email)
-
-    if (user) {
-      const { email, messages, userId } = user
-      res.status(200).json({ email, messages, userId })
-    } else {
-      res.status(404).json({ messageError: 'User not found' })
+      res.status(500).json({ messageError: 'Internal Server Error', error })
     }
   }
 
@@ -33,8 +24,8 @@ class ChatController {
     const user = await ChatService.getUserByUserId(userId)
 
     if (user) {
-      const { email, messages, userId } = user
-      res.status(200).json({ email, messages, userId })
+      const { userName, messages, userId } = user
+      res.status(200).json({ userName, messages, userId })
     } else {
       res.status(404).json({ messageError: 'User not found' })
     }
@@ -56,6 +47,7 @@ class ChatController {
   public deleteChatByUserId = async (req: Request, res: Response) => {
     try {
       const { userId } = req.params
+
       await ChatService.deleteChatByUserId(userId)
       await TelegramGateway.sendMessage(`User has deleted chat`)
 
@@ -70,6 +62,7 @@ class ChatController {
   public getAllUsers = async (_: unknown, res: Response) => {
     try {
       const users = await ChatService.getAllUsers()
+
       res.status(200).json({ users })
     } catch (error) {
       res.status(500).json({ messageError: 'Internal Server Error', error })
