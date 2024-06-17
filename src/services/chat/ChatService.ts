@@ -1,4 +1,4 @@
-import { User } from '../../models'
+import { Message, User } from '../../models'
 
 class ChatService {
   public getUserByUserId = async (userId: string) => {
@@ -19,6 +19,14 @@ class ChatService {
 
     if (!user) {
       throw new Error('Chat not found')
+    }
+  }
+
+  public deleteChatHistoryByUserId = async (userId: string) => {
+    const user = await User.updateOne({ userId }, { $set: { messages: [] } })
+
+    if (!user) {
+      throw new Error('History messages not found')
     }
   }
 

@@ -59,6 +59,20 @@ class ChatController {
     }
   }
 
+  public deleteChatHistoryByUserId = async (req: Request, res: Response) => {
+    try {
+      const { userId } = req.params
+
+      await ChatService.deleteChatHistoryByUserId(userId)
+
+      res
+        .status(200)
+        .json({ messageInfo: 'Chat history has been deleted successfully' })
+    } catch (error) {
+      res.status(500).json({ messageError: 'Internal Server Error', error })
+    }
+  }
+
   public getAllUsers = async (_: unknown, res: Response) => {
     try {
       const users = await ChatService.getAllUsers()
