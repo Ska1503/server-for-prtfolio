@@ -15,6 +15,10 @@ class ChatRoutes {
     this.router.post('/:userName/create', ChatController.createUser)
     this.router.delete('/:userId/deleteUser', ChatController.deleteUserByUserId)
     this.router.delete('/:userId/deleteChat', ChatController.deleteChatByUserId)
+    this.router.delete(
+      '/:userId/deleteChatHistory',
+      ChatController.deleteChatHistoryByUserId
+    )
   }
 }
 
